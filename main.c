@@ -15,7 +15,8 @@ static Rectangle btnSelector[4] = {
 
 
 void screenLayout(void);
-void clicked(void);
+void showGames(void);
+
 
 int main(void) {
   InitWindow(_winWidth, _winHeight, _winName);
@@ -24,6 +25,7 @@ int main(void) {
   while(!WindowShouldClose()){
     BeginDrawing();
     screenLayout();
+    clicked();
     EndDrawing();
   }
   CloseWindow();
@@ -38,7 +40,7 @@ void screenLayout(void){
 
   //Up Menu
   DrawRectangle(0, 0, _winWidth, 50, LIGHTGRAY);
-  DrawText("Bem-Vindo a Fassina's Library!", 675, 10, 30, GRAY);
+  DrawText("Bem-Vindo a Fassina's Library!", 675, 12, 30, GRAY);
 
   
   //Side Menu
@@ -58,17 +60,18 @@ void screenLayout(void){
 }
 
 
-void clicked(void){
+void showGames(void){
+
   Vector2 mouse = GetMousePosition();
   
   if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
 
-    for(int index = 0; index < 4; index++){
+    for(int i = 0; i < 4; i++){
       if(CheckCollisionPointRec(mouse, btnSelector[index])){
 
-        switch(index){
+        switch(i){
           case 0: // Steam
-            printf("%s", STEAM_PATH);
+            //TODO: Show games in the Steam directory 
             break;
           case 1: // Epic Games
             // Handle Epic Games
@@ -79,8 +82,19 @@ void clicked(void){
           case 3: // Other
             // Handle Other
             break;
+
+          default:
+            //Show list with all games
+
         }
+
       }
     }
   }
 }
+
+
+
+    
+
+
