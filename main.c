@@ -1,8 +1,21 @@
 #include "main.h"
 
+//CONST DECLARATIONS
 const char _winName[] = "Fassina's Library";
 const int _winWidth = 1600;
 const int _winHeight = 1200;
+
+
+//'OBJECTS' DECLARATIONS --------------------------
+struct Platforms{
+  char name[50];
+ 
+  struct Games{
+      char nome[50];
+      char dirName[50];
+  } *games;
+};
+struct Platforms plataform[4];
 
 
 static Rectangle btnSelector[4] = {
@@ -13,26 +26,26 @@ static Rectangle btnSelector[4] = {
 };
 
 
-
+//FUNCTION DECLARATIONS --------------------------
 void screenLayout(void);
 void showGames(void);
+void getGames(const char path[]);
 
-
-int main(void) {
-  InitWindow(_winWidth, _winHeight, _winName);
-  SetTargetFPS(30);
-  
-  while(!WindowShouldClose()){
-    BeginDrawing();
+//LOGIC ------------------------------------- 
+int main(void) { 
+  InitWindow(_winWidth, _winHeight, _winName); 
+  SetTargetFPS(30); 
+  while(!WindowShouldClose()){ BeginDrawing();
     screenLayout();
-    clicked();
+    showGames();
+    //getGames(STEAM_PATH);
     EndDrawing();
   }
   CloseWindow();
 
 }
 
-
+//FRONT END -----------------------------------------------
 void screenLayout(void){
   
   ClearBackground(RAYWHITE);
@@ -67,11 +80,17 @@ void showGames(void){
   if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
 
     for(int i = 0; i < 4; i++){
-      if(CheckCollisionPointRec(mouse, btnSelector[index])){
+      if(CheckCollisionPointRec(mouse, btnSelector[i])){
 
         switch(i){
           case 0: // Steam
-            //TODO: Show games in the Steam directory 
+            /*TODO:
+             * Get in the STEAM_PATH, search for the .exe file in the folder, get the icon and name of the file
+             * 
+             * Maybe make the design like pages/cards that show ALL executables from the folder?
+             */ 
+             getGames(STEAM_PATH);
+
             break;
           case 1: // Epic Games
             // Handle Epic Games
@@ -94,7 +113,26 @@ void showGames(void){
 }
 
 
+//BACK END ---------------------------------------
 
-    
+void getGames(const char path[]){
+
+    struct dirent *de;
+    DIR *dr = opendir(path);
+
+    if (dr == NULL){
+      DrawRectangle(300, 100, (_winWidth-350) , 100, LIGHTGRAY);
+      DrawText("Não foi possível abrir o diretório atual", 320, 120, 60, GRAY);
+      return;
+    }
+
+    while ((de = readdir(dr)) != NULL){
+      printf("%s\n", de->d_name);
+      DrawRectangle(300, 300, 300, 50, LIGHTGRAY);
+    }
+    closedir(dr);
+
+}
+
 
 
